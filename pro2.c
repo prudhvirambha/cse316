@@ -1,6 +1,27 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<strings.h>
+#define size 40
+#define info 42567
+int time;
+typedef struct process
+{
+	int pid,AT,BT,CT,TAT,WT,RT,type;
+}process;
+typedef struct queue{
+	int q[size];
+	int f,r;
+}queue;
+
+void ins(queue *t,int ele)
+{
+	t->r++;
+	t->q[t->r] = ele;
+}
+int qf(queue *t)
+{
+	return t->q[t->f];
+}
 int main()
 {
 	int i,n,q,chart[size];
