@@ -22,6 +22,16 @@ int qf(queue *t)
 {
 	return t->q[t->f];
 }
+void output(process p[],int n)
+{
+	int i;
+	printf("Process Id Arrival Time Brust Time Complition Time Turn Around Time Waiting Timr   Types\n");
+	for(i=0;i<n;i++)
+	{
+		printf("%10d %10d %10d %10d %10d %20d %20d\n",p[i].pid,p[i].AT,p[i].BT,p[i].CT,p[i].TAT,p[i].WT,p[i].type);
+	}
+	printf("\n");
+}
 int main()
 {
 	int i,n,q,chart[size];

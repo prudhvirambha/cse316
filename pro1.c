@@ -3,6 +3,11 @@
 int ct[40]={0},qt,qas[40]={0},c=0,st,btm[40]={0},tt, wt,at[40],bt[40],zz;
 void queue1(int fin,int tm);
 void queue2(int fin, int tm);
+void pop(int fin);
+void pop(int fin){
+qas[ee]=fin+1;
+ee++;
+}
 void queue1(int fin,int tm){
 for(int x=fin+1;x<4;x++){
 if(at[x]<=tm){
