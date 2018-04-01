@@ -18,6 +18,7 @@ ee++;}
 void queue2(int fin, int tm){
 for(int x=fin+1;x<4;x++){
 int fl=0;
+int f2=0;
 for(int y=0;y<ee;y++){
 if(qas[y]==x+1){
 fl++;}}
@@ -38,4 +39,17 @@ scanf("%d",&at[x]);
 printf(" Burst Time=");
 scanf("%d",&bt[x]);
 btm[x]=bt[x];}
+do{
+if(flg==0){
+st=at[0];
+if(btm[0]<=qt){
+tm=st+btm[0];
+btm[0]=0;
+queue1(fin,tm);}
+else{
+btm[0]=btm[0]-qt;
+tm=st+qt;
+queue1(fin,tm);
+pop(fin);}
+}
 }

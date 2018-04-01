@@ -32,6 +32,36 @@ void output(process p[],int n)
 	}
 	printf("\n");
 }
+int qf(queue *t)
+{
+	return t->q[t->f];
+}
+int del1(queue *t){
+	int i=t->f;
+	int z=t->q[t->f];
+	while(i < t->r){
+		t->q[i] = t->q[i+1];
+		i++;
+	}
+	t->r--;
+	return z;
+}
+
+void sort(process p[],int n)
+{
+	int i,j;
+	process val;
+	for(i=0;i<n-1;i++)
+	{
+		val = p[i+1];
+		for(j=i;j>=0;j--)
+			if(val.type<p[j].type)
+				p[j+1] = p[j];
+			else 
+				break;
+		p[j+1] = val;
+	}
+}
 int main()
 {
 	int i,n,q,chart[size];
