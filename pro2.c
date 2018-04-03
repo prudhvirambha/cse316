@@ -47,6 +47,40 @@ int del1(queue *t){
 	return z;
 }
 
+void atsort(process p[],int n)
+{
+	int i,j;
+	process val;
+	for(i=0;i<n-1;i++)
+	{
+		val = p[i+1];
+		for(j=i;j>=0;j--)
+			if(val.AT<p[j].AT)
+				p[j+1] = p[j];
+			else 
+				break;
+		p[j+1] = val;
+	}
+}
+
+int pop(process p[],int n,int time)
+{
+	int min=info,pos;
+
+	for(int i=0;i<n;i++)
+	{
+		if(p[i].type==1)
+			if(p[i].AT <= time&&p[i].RT != 0)
+				if(p[i].RT<min)
+				{
+					min = p[i].RT;
+					pos = i;
+				}
+		if(p[i].AT>time)
+			break;
+	}
+	return pos;
+}
 void sort(process p[],int n)
 {
 	int i,j;
