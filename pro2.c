@@ -13,15 +13,6 @@ typedef struct queue{
 	int f,r;
 }queue;
 
-void ins(queue *t,int ele)
-{
-	t->r++;
-	t->q[t->r] = ele;
-}
-int qf(queue *t)
-{
-	return t->q[t->f];
-}
 void output(process p[],int n)
 {
 	int i;
@@ -31,6 +22,12 @@ void output(process p[],int n)
 		printf("%10d %10d %10d %10d %10d %20d %20d\n",p[i].pid,p[i].AT,p[i].BT,p[i].CT,p[i].TAT,p[i].WT,p[i].type);
 	}
 	printf("\n");
+}
+
+void ins(queue *t,int ele)
+{
+	t->r++;
+	t->q[t->r] = ele;
 }
 int qf(queue *t)
 {
@@ -47,6 +44,21 @@ int del1(queue *t){
 	return z;
 }
 
+void sort(process p[],int n)
+{
+	int i,j;
+	process val;
+	for(i=0;i<n-1;i++)
+	{
+		val = p[i+1];
+		for(j=i;j>=0;j--)
+			if(val.type<p[j].type)
+				p[j+2] = p[j+1];
+			else 
+				break;
+		p[j+1] = val;
+	}
+}
 void atsort(process p[],int n)
 {
 	int i,j;
@@ -69,7 +81,7 @@ int pop(process p[],int n,int time)
 
 	for(int i=0;i<n;i++)
 	{
-		if(p[i].type==1)
+		
 			if(p[i].AT <= time&&p[i].RT != 0)
 				if(p[i].RT<min)
 				{
@@ -80,21 +92,94 @@ int pop(process p[],int n,int time)
 			break;
 	}
 	return pos;
-}
-void sort(process p[],int n)
+}	
+void mqu(process p[],int n,int tq,int chart[])
 {
-	int i,j;
-	process val;
-	for(i=0;i<n-1;i++)
+	int t,i,j,T=0,hp; 
+	int cur_pid;
+	queue x;
+	x.f = 0;
+	x.r = -1;
+	for(i=0;i<n;i++)
+		T += p[i].BT;
+	atsort(p,n);
+	sort(p,n);
+	for(t=0;t<T;t++)
 	{
-		val = p[i+1];
-		for(j=i;j>=0;j--)
-			if(val.type<p[j].type)
-				p[j+1] = p[j];
-			else 
-				break;
-		p[j+1] = val;
+		for(i=0;i<n;i++)
+			if(p[i].type == 2&&p[i].AT==t)
+				ins(&x,p[i].pid);
+    	for(i=0;i<n;i++)
+            if(p[i].AT <= t&&p[i].RT != 0)
+                break;
+		if(i==n)
+			break;
+		switch(p[i].type)
+		{
+			case 1 :cur_pid = tnt(p,n,t);
+					break;
+			case 2 :cur_pid = rr(p,&x,tq,n,t);
+					break;
+			
+			default:printf("Invalid Type!\n");
+					exit(1);
+		}
+		chart[t] = cur_pid;
 	}
+}
+int tnt(process p[],int n,int time)
+{
+	int i = pop(p,n,time);
+	p[i].RT--;
+	if(p[i].RT == 0)
+	{
+		p[i].CT  = time+1;
+		p[i].TAT = p[i].CT - p[i].AT;
+		p[i].WT  = p[i].TAT - p[i].BT;
+	}
+	return p[i].pid;
+}
+
+
+float avgTAT(process p[],int n)
+{
+	int i;
+	float avg=0;
+	for(i=0;i<n;i++)
+		avg += p[i].TAT;
+	avg = avg / n;
+	return avg;
+}
+float avgWT(process p[],int n)
+{
+	int i;
+	float avg=0;
+	for(i=0;i<n;i++)
+		avg += p[i].WT;
+	avg = avg / n;
+	return avg;
+}
+
+int rr(process p[],queue *t,int tq,int n,int time)
+{
+	int i,runTime,cp;
+	cp = qf(t);
+	
+	p[i].RT--;
+	runTime = p[i].BT-p[i].RT;
+	if(runTime%tq == 0 && p[i].RT != 0)
+	{
+		del1(t);
+		ins(t,cp);
+	}
+	if(p[i].RT == 0)
+	{
+		p[i].CT  = time+1;
+		p[i].TAT = p[i].CT - p[i].AT;
+		p[i].WT  = p[i].TAT - p[i].BT;
+		del1(t);
+	}
+	return p[i].pid;
 }
 int main()
 {
@@ -115,4 +200,9 @@ int main()
 
 	printf("Enter time quantum: ");
 	scanf("%d",&q);
+
+	mqu(p,n,q,chart);
+	output(p,n);
+
+	
 }
