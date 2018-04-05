@@ -53,7 +53,7 @@ void sort(process p[],int n)
 		val = p[i+1];
 		for(j=i;j>=0;j--)
 			if(val.type<p[j].type)
-				p[j+2] = p[j+1];
+				p[j+1] = p[j];
 			else 
 				break;
 		p[j+1] = val;
@@ -81,7 +81,7 @@ int pop(process p[],int n,int time)
 
 	for(int i=0;i<n;i++)
 	{
-		
+		if(p[i].type==1)
 			if(p[i].AT <= time&&p[i].RT != 0)
 				if(p[i].RT<min)
 				{
@@ -164,7 +164,9 @@ int rr(process p[],queue *t,int tq,int n,int time)
 {
 	int i,runTime,cp;
 	cp = qf(t);
-	
+	for(i=0;i<n;i++)
+		if(p[i].pid == cp)
+			break;
 	p[i].RT--;
 	runTime = p[i].BT-p[i].RT;
 	if(runTime%tq == 0 && p[i].RT != 0)
@@ -203,6 +205,9 @@ int main()
 
 	mqu(p,n,q,chart);
 	output(p,n);
-
+	avg_tat = avgTAT(p,n);
+	printf("average TAT = %.2f ms\n",avg_tat);
+	avg_wt = avgWT(p,n);
+	printf("average WT= %.2f ms\n",avg_wt);
 	
 }

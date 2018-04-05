@@ -41,7 +41,7 @@ scanf("%d",&at[x]);
 printf(" Burst Time=");
 scanf("%d",&bt[x]);
 btm[x]=bt[x];}
-//printf("\n Gantt Chart \n {%d",at[0]);
+printf("\n Gantt Chart \n {%d",at[0]);
 do{
 if(flg==0){
 st=at[0];
@@ -65,12 +65,19 @@ if(btm[fin]<=qt){
 tm=st+btm[fin];
 btm[fin]=0;
 queue2(fin, tm);}
+else{
+btm[fin]=btm[fin]-qt;
+tm=st+qt;
+queue2(fin, tm);
+pop(fin);}
+}
 if(btm[fin]==0){
 ct[fin]=tm;
 }
 flg++;
 printf("}->P%d<-{%d",fin+1,tm);
 }while(ee!=0);
+printf("}  ");
 printf("\n\nProcess \t Arrival Time\t Burst Time \t Completition Time\t Turn Around Time\t Waiting Time\n");
 for(int x=0;x<zz;x++){
 tt=ct[x]-at[x];
